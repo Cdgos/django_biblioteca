@@ -1,6 +1,7 @@
 from django import forms
 
-from .models import Autor
+from .models import Autor, Libro
+
 
 #Esta clase formulario pertenece al modelo libro.
 class AutorForm(forms.ModelForm):
@@ -45,6 +46,36 @@ class AutorForm(forms.ModelForm):
                     'class': 'form-control',
                     'placeholder': 'Ingrese una breve descripción para el Autor',
                     'id': 'descripcion'
+                }
+            )
+        }
+
+class LibroForm(forms.ModelForm):
+    class Meta:
+        model = Libro
+        fields = ("titulo", "autor_id", "fecha_publicacion") #Tupla
+
+        labels = {
+            'titulo': 'Titulo del Libro',
+            'autor_id': 'Autor(es) del Libro',
+            'fecha_publicacion': 'Fecha de publicación del Libro'
+        }
+
+        widgets = {
+            'titulo': forms.TextInput(
+                attrs = {
+                    'class': 'form-control',
+                    'placeholder': 'Ingrese el título del Libro'
+                }
+            ),
+            'autor_id': forms.SelectMultiple(
+                attrs= {
+                    'class': 'form-control'
+                }
+            ),
+            'fecha_publicacion': forms.SelectDateWidget(
+                attrs= {
+                    'class': 'form-control'
                 }
             )
         }
