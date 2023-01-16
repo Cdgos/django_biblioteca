@@ -47,8 +47,7 @@
                     <li class="menu-item-has-children dropdown">
                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-book"></i>Libros</a>
                        <ul class="sub-menu children dropdown-menu">
-                           
-                           <li><i class="fa fa-table"></i><a href="#">Listado de Libros</a></li>
+                           <li><i class="fa fa-table"></i><a href="{% url 'libro:listado_libros' %}">Listado de Libros</a></li>
                        </ul>
                     </li> 
 
@@ -87,7 +86,7 @@
                         <div class="user-menu dropdown-menu">
                             <a class="nav-link" href="#"><i class="fa fa- user"></i>Cambiar Contraseña</a>
                             <a class="nav-link" href="#"><i class="fa fa -cog"></i>Administración</a>
-                            <a class="nav-link" href="#"><i class="fa fa-power -off"></i>Logout</a>
+                            <a class="nav-link" href="{% url 'logout' %}"><i class="fa fa-power -off"></i>Logout</a>
                         </div>
                     </div>
 

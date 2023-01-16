@@ -1,10 +1,90 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<!-- Heredar de index -->
+{% extends 'index.html' %}
+{% load static %}
+{% block titulo %}
+    Biblioteca.dev | Listado de Libros
+{% endblock titulo %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/lib/datatable/dataTables.bootstrap.min.css' %}">
+{% endblock extra_css %}
+
+{% block body %}
+    <div>
+        <button class="btn btn-primary" type="button" onclick="abrir_modal_creacion('{% url 'libro:crear_libro' %}')">Crear Libro</button>
+    </div>
+<!-- Si existen libros (object_list, por no especificar el context_object_name -->
+  {% if libros %}
+      <div class="card">
+          <div class="card-header">
+              <strong class="card-title">Listado de Libros</strong>
+          </div>
+
+          <div class="table-stats order-table ov-h">
+              <table class="table">
+                  <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Titulo</th>
+                        <th>Autor</th>
+                        <th>Fecha de publicacion</th>
+                        <th>Opciones</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    <!-- object_list ya que no le especificamos el context_object_name -->
+                    {% for libro in libros %}
+                      <tr>
+                        <td>{{ libro.id }}</td>
+                        <td>{{ libro.titulo }}</td>
+                      <!-- Tenemos una relacion de Muchos a Muchos, por lo tanto, un libro puede tener
+                      muchos autores. Asi que por eso recorremos la FK.
+                      -->
+                        <td>
+                            {% for autor in libro.autor_id.all %}
+                                <li>{{ autor.nombre }} {{ autor.apellido }}</li>
+                            {% endfor %}
+                        </td>
+                        <td>{{ libro.fecha_publicacion }}</td>
+                        <td>
+                          <button onclick="abrir_modal_edicion('{% url 'libro:editar_libro' libro.id %}')" class="btn btn-primary">Editar</button>
+                          <a href="{% url 'libro:eliminar_libro' libro.id %}" class="btn btn-danger">Eliminar</a>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+              </table>
+          </div>
+      </div>
+      {% else %}
+        <h1>No existen libros registrados</h1>
+      {% endif %}
+
+    <div class="modal fade" id="creacion" role="dialog">
+
+    </div>
+
+    <div class="modal fade" id="edicion" role="dialog">
+
+    </div>
+
+{% endblock body %}
+
+{% block extrajs %}
+    <script type="text/javascript">
+        var $ = jQuery.noConflict();
+        function abrir_modal_edicion(url){
+            $('#edicion').load(url, function (){
+                $(this).modal('show');
+            });
+        }
+        function abrir_modal_creacion(url){
+            $('#creacion').load(url,function (){
+                $(this).modal('show');
+            })
+        }
+    </script>
+{% endblock extrajs %}
+
+
+
+

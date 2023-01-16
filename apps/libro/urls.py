@@ -1,6 +1,7 @@
 from django.urls import path
 from django.contrib.auth.decorators import login_required
-from .views import ListadoAutor, ActualizarAutor, CrearAutor, EliminarAutor, ListadoLibros, CrearLibro, ActualizarLibro, EliminarLibro
+from .views import ListadoAutor, ActualizarAutor, CrearAutor, EliminarAutor, ListadoLibros, ActualizarLibro, \
+    EliminarLibro, CrearLibro
 
 urlpatterns = [
     #(textoBarraDirecciones, ()deViews y se ejecuta, identificadorUrl)

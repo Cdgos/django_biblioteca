@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
-from django.views.generic import TemplateView, ListView, UpdateView, CreateView, DeleteView
+from django.views.generic import View, TemplateView, ListView, UpdateView, CreateView, DeleteView
 from django.urls import reverse_lazy
 from .forms import AutorForm, LibroForm
 from .models import Autor, Libro
@@ -78,11 +78,27 @@ class EliminarAutor(DeleteView):
         return redirect('libro:listar_autor')
 
 # ====== LIBROS CRUD ====== #
-class ListadoLibros(ListView):
+# Si la queryset no se indica será por defecto = Libro.objects.all() y se llama object_list
+
+#Vista que renderizará un listado(get) y se enviaran datos en un formulario(post) -> Por lo tanto, lo hacemos con View(general)
+class ListadoLibros(View):
     model = Libro
     template_name = 'libro/libro/listar_libro.html'
-    queryset = Libro.objects.filter(estado=True)
-    # Si la queryset no se indica será por defecto = Libro.objects.all() y se llama object_list
+    form_class = LibroForm
+    #Método sobreescrito de view, el cual ejecuta para obtener la consulta
+    def get_queryset(self):
+        return self.model.objects.filter(estado=True)
+    #Metodo sobreescrito para obtener el contexto que será enviado al template
+    def get_context_data(self, **kwargs):
+        contexto = {}
+        contexto['libros'] = self.get_queryset()
+        contexto['form'] = self.form_class
+        return contexto
+
+    #get retorna toda la info que será obtenida cuando se haga este tipo de peticiones
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, self.get_context_data())
+
 
 class CrearLibro(CreateView):
     model = Libro
@@ -90,11 +106,16 @@ class CrearLibro(CreateView):
     template_name = 'libro/libro/crear_libro.html'
     success_url = reverse_lazy('libro:listado_libros')
 
+#La vista actualizar trabajara en la misma de listar, se redefine el contexto para que siga cargando el listado al editar.
 class ActualizarLibro(UpdateView):
     model = Libro
-    template_name = 'libro/libro/crear_libro.html'
+    template_name = 'libro/libro/libro.html'
     form_class = LibroForm
     success_url = reverse_lazy('libro:listado_libros')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['libros'] = Libro.objects.filter(estado= True)
+        return context
 
 class EliminarLibro(DeleteView):
     model = Libro
