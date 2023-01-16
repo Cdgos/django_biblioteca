@@ -12,9 +12,9 @@ class AutorForm(forms.ModelForm):
 
         # Pintar etiquetas label en el template
         labels = {
-            'nombre': 'Nombre del libro',
-            'apellido': 'Apellido del libro',
-            'nacionalidad': 'Nacionalidad del libro',
+            'nombre': 'Nombre del Autor',
+            'apellido': 'Apellido del Autor',
+            'nacionalidad': 'Nacionalidad del Autor',
             'descripcion': 'Pequeña descripción',
         }
 

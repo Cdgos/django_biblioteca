@@ -85,13 +85,13 @@ class ListadoLibros(View):
     model = Libro
     template_name = 'libro/libro/listar_libro.html'
     form_class = LibroForm
-    #Método sobreescrito de view, el cual ejecuta para obtener la consulta
+    #Funcion que utiliza toda View basada en clase para retornar la consulta que se va a utilizar a lo largo de toda la clase.
     def get_queryset(self):
         return self.model.objects.filter(estado=True)
     #Metodo sobreescrito para obtener el contexto que será enviado al template
     def get_context_data(self, **kwargs):
         contexto = {}
-        contexto['libros'] = self.get_queryset()
+        contexto['libros'] = self.get_queryset()   # agregamos la consulta al contexto
         contexto['form'] = self.form_class
         return contexto
 
